@@ -1,9 +1,8 @@
 package com.springbootpractice.quizapp.controller;
 
-import com.springbootpractice.quizapp.entity.Question;
+import com.springbootpractice.quizapp.model.Question;
 import com.springbootpractice.quizapp.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
