@@ -2,6 +2,7 @@ package com.springbootpractice.quizapp.controller;
 
 import com.springbootpractice.quizapp.model.Question;
 import com.springbootpractice.quizapp.model.QuestionWrapper;
+import com.springbootpractice.quizapp.model.Response;
 import com.springbootpractice.quizapp.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,4 +29,8 @@ public class QuizController {
         return quizService.getQuizQuestions(id);
     }
 
+    @PostMapping("submit/{id}")
+    public ResponseEntity<Integer> submitQuiz(@PathVariable Integer id, @RequestBody List<Response> responses) {
+        return quizService.calculateResult(id, responses);
+    }
 }

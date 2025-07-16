@@ -1,10 +1,12 @@
 package com.springbootpractice.quizapp.service;
 
+import com.fasterxml.jackson.databind.deser.BasicDeserializerFactory;
 import com.springbootpractice.quizapp.dao.QuestionDao;
 import com.springbootpractice.quizapp.dao.QuizDao;
 import com.springbootpractice.quizapp.model.Question;
 import com.springbootpractice.quizapp.model.QuestionWrapper;
 import com.springbootpractice.quizapp.model.Quiz;
+import com.springbootpractice.quizapp.model.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -46,4 +48,20 @@ public class QuizService {
 
         return new ResponseEntity<>(questionsForUSer, HttpStatus.OK);
     }
+    public ResponseEntity<Integer> calculateResult(Integer id, List<Response> responses) {
+
+        Quiz quiz = quizDao.findById(id).get();
+        List<Question> questions = quiz.getQuestions();
+        int right = 0;
+        int i=0;
+        for(Response response:responses){
+            if(response.getResponse().equals(questions.get(i).getRightAnswer()))
+                right++;
+
+            i++;
+        }
+        return new ResponseEntity<>(right, HttpStatus.OK);
+    }
 }
+
+
