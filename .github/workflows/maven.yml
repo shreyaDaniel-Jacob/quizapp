@@ -19,6 +19,21 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:15
+        ports:
+          - 5433:5432  # Map container port 5432 to host port 5433
+        env:
+          POSTGRES_DB: quiz
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: root
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 17
@@ -27,6 +42,15 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+
+    - name: Wait for PostgreSQL to be ready
+      run: |
+          echo "Waiting for PostgreSQL..."
+          for i in {1..10}; do
+            nc -z localhost 5433 && echo "PostgreSQL is up!" && break
+            echo "Waiting..."
+            sleep 5
+          done
     - name: Build with Maven
       run: mvn clean install
 
